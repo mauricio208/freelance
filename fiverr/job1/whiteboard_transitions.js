@@ -2,7 +2,8 @@
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //Logic for transition menu
-
+url="";
+ext=".png";
 	function createInputsInMenu(contenedor,transition_element) {
 		param=transition_element.split("(")[1].split(")")[0].split(",");
 		param=param.slice(1);
@@ -18,13 +19,15 @@
 
 	function loadTransitionInMenu(obj) {
 		obj.find(".transition").each(function() {
-			mt=$("<div class='menu_transition'><button type='button' class='update-animation-transit'>update animation</button></div>");
+			mt=$("<div class='menu_transition'><button type='button' class='modify_button'><img src='"+url+$(this).html().split("(")[0]+ext+"'alt='"+$(this).html().split("(")[0]+"'></button></div>");
 			t=$(this).clone();
 			t.prop("class","transition_to_update");
 			mt.append(t);
+			update_button=$("<button type='button' class='update-animation-transit' hidden>update animation</button>");
 			params=$("<div class='transition_group_span_input' hidden></div>");
 			createInputsInMenu(params,$(this).html());
 			mt.append(params);
+			mt.append(update_button);
 			obj.find(".menu_transitions").append(mt)
 		});
 	};
@@ -37,6 +40,8 @@
 		})
 		updated_function=function_name+"(obj"+params+")";
 		t.html(updated_function);
+		updateTransitionToComponent($(this));
+
 	};
 
 	function updateTransitionToComponent(obj){
@@ -65,7 +70,7 @@
 		span.html(func);
 		component.find(".transitions").append(span);
 		t.hide();
-		t.parent().hide();
+		
 	};
 	$(document).ready(function(){
 		$(document).mouseup(function (e)
@@ -87,28 +92,37 @@
 		$(".component").on("click",function (){
 			menu=$(this).find(".menu_manage_transitions");
 			if ( menu.length == 0) {
-				$(this).append("<div class='menu_manage_transitions'><button type='button' class='add-animation-transit'>Add animation</button><div class='menu_transitions'></div></div>");
+				$(this).append("<div class='menu_manage_transitions'><button type='button' class='add-animation-transit'>Add animation</button><div class='menu_transitions' hidden></div></div>");
 			}else{
 				menu.find(".menu_transitions").html("");
 			};
-			menu.show();
 			loadTransitionInMenu($(this));
+			menu.show();
+			
 		}).on('click','.menu_manage_transitions',function(e) {
 	        e.stopPropagation();
+	    }).on('click','.modify-animation-transit',function(e) {
+	        $(this).siblings(".transitions_to_add").hide();
+	    	$(this).siblings(".menu_transitions").html("");
+	        loadTransitionInMenu($(this).closest(".component"));
+	        $(this).siblings(".menu_transitions").toggle();
 	    }).on('click',".update-animation-transit",function() {
 			updateTransitionInMenu($(this).parent());
 		}).on('click',".add-animation-transit",function() {
-			if ($(this).siblings(".transitions_to_add").) {}
-			$(this).siblings(".transitions_to_add").show();
+			$(this).siblings(".transitions_to_add").toggle();
+			$(this).siblings(".menu_transitions").hide();
 		}).on('click',".add_transition_button",function() {
 			t=$(".param_transition_to_add");
 			t.find(".input_transitions_to_add").html("");
 			createInputsInMenu(t.find(".input_transitions_to_add"),$(this).prop("name"));
 			t.find(".add_transition").prop("name",$(this).prop("name"));
 			t.show();
-			
+		}).on('click',".modify_button",function() {
+			$(this).siblings(".transition_group_span_input").toggle();
+			$(this).siblings(".update-animation-transit").toggle();
 		}).on('click',".add_transition",function() {
 			addTransitionToComponent($(this));
+
 		});
 
 	});
