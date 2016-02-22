@@ -1,0 +1,18 @@
+.menu_manage_transitions{
+    position: absolute;
+    display: flex;
+    left: 150px;
+    background-color: lightgray;
+}
+
+.buttons_transitions{
+    overflow-x: scroll;
+    width: 200px;
+}
+
+
+.add_transition_button{
+    display: inline-block;
+    height: 30px;
+    width: 105px;
+}
