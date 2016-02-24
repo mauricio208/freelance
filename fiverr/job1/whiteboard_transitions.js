@@ -23,7 +23,7 @@ ext=".png";
 			t=$(this).clone();
 			t.prop("class","transition_to_update");
 			mt.append(t);
-			update_button=$("<button type='button' class='update-animation-transit' hidden>update animation</button>");
+			update_button=$("<button type='button' class='update-animation-transit' hidden>update animation</button><button type='button' class='remove-animation-transit' hidden>remove animation</button>");
 			params=$("<div class='transition_group_span_input' hidden></div>");
 			createInputsInMenu(params,$(this).html());
 			mt.append(params);
@@ -31,15 +31,20 @@ ext=".png";
 			obj.find(".menu_transitions").append(mt)
 		});
 	};
-	function updateTransitionInMenu(obj){
-		t=obj.find(".transition_to_update");
-		function_name=t.html().split("(")[0];
-		params="";
-		obj.find(".transition_input").each(function(){
-			params=","+$(this).attr("name")+"="+$(this).val()+params;
-		})
-		updated_function=function_name+"(obj"+params+")";
-		t.html(updated_function);
+	function updateTransitionInMenu(obj,erase){
+		if(erase){
+			obj.remove();
+		}else{
+			t=obj.find(".transition_to_update");
+			function_name=t.html().split("(")[0];
+			params="";
+			obj.find(".transition_input").each(function(){
+				params=","+$(this).attr("name")+"="+$(this).val()+params;
+			})
+			updated_function=function_name+"(obj"+params+")";
+			t.html(updated_function);
+		}
+		
 		updateTransitionToComponent(obj);
 
 	};
@@ -82,7 +87,6 @@ ext=".png";
 			        && container.has(e.target).length === 0) 
 			    {
 			        container.hide();
-			        updateTransitionToComponent(container);
 			    }
 
 		    });
@@ -107,7 +111,9 @@ ext=".png";
 	        loadTransitionInMenu($(this).closest(".component"));
 	        $(this).siblings(".menu_transitions").toggle();
 	    }).on('click',".update-animation-transit",function() {
-			updateTransitionInMenu($(this).parent());
+			updateTransitionInMenu($(this).parent(),false);
+		}).on('click',".remove-animation-transit",function() {
+			updateTransitionInMenu($(this).parent(),true);
 		}).on('click',".add-animation-transit",function() {
 			$(this).siblings(".transitions_to_add").toggle();
 			$(this).siblings(".menu_transitions").hide();
@@ -120,6 +126,7 @@ ext=".png";
 		}).on('click',".modify_button",function() {
 			$(this).siblings(".transition_group_span_input").toggle();
 			$(this).siblings(".update-animation-transit").toggle();
+			$(this).siblings(".remove-animation-transit").toggle();
 		}).on('click',".add_transition",function() {
 			addTransitionToComponent($(this));
 
@@ -134,11 +141,23 @@ function runMyTransitions(obj) {
 		eval($(this).html());
 	});
 };
-
-function runAllTransitions() {
-	$(".component").each(function(){
+function run_get_originals() {
+	var $originals=[];
+	$(".component").each(function(index){
+		$originals[index]=$(this).clone();
 		runMyTransitions($(this));
-	});
+	})
+	return $originals;
+}
+function runAllTransitions() {
+	
+	$.when($originals=run_get_originals()).done(
+	// $(".component").each(function(index){
+	// 	$(this).replaceWith($originals[index]);
+	// })
+	alert("done");
+	);
+
 };
 
 
