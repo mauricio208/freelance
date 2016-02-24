@@ -40,19 +40,19 @@ ext=".png";
 		})
 		updated_function=function_name+"(obj"+params+")";
 		t.html(updated_function);
-		updateTransitionToComponent($(this));
+		updateTransitionToComponent(obj);
 
 	};
 
 	function updateTransitionToComponent(obj){
-		scripts=obj.find(".transition_to_update");
+		scripts=obj.closest(".component").find(".transition_to_update");
+		scripts=scripts.clone();
 		if (scripts.length > 0){
 			scripts.each(function(){
 				$(this).prop("class","transition");
 			});
-			t=obj.parent().find(".transitions")
-			t.html("");
-			t.append(scripts);
+			t=obj.closest(".component").find(".transitions")
+			t.html(scripts);
 		}
 	};
 	function addTransitionToComponent(obj) {
