@@ -44,7 +44,7 @@ ext=".png";
 			updated_function=function_name+"(obj"+params+")";
 			t.html(updated_function);
 		}
-		
+
 		updateTransitionToComponent(obj);
 
 	};
@@ -75,7 +75,7 @@ ext=".png";
 		span.html(func);
 		component.find(".transitions").append(span);
 		t.hide();
-		
+
 	};
 	$(document).ready(function(){
 		$(document).mouseup(function (e)
@@ -83,14 +83,14 @@ ext=".png";
 		    var containers = $(".menu_manage_transitions");
 		    containers.each(function(){
 		    	container=$(this);
-			    if (!container.is(e.target) 
-			        && container.has(e.target).length === 0) 
+			    if (!container.is(e.target)
+			        && container.has(e.target).length === 0)
 			    {
 			        container.hide();
 			    }
 
 		    });
-		    
+
 		});
 
 		$(".component").on("click",function (){
@@ -102,7 +102,7 @@ ext=".png";
 			};
 			loadTransitionInMenu($(this));
 			menu.show();
-			
+
 		}).on('click','.menu_manage_transitions',function(e) {
 	        e.stopPropagation();
 	    }).on('click','.modify-animation-transit',function(e) {
@@ -150,14 +150,9 @@ function run_get_originals() {
 	return $originals;
 }
 function runAllTransitions() {
-	
-	$.when($originals=run_get_originals()).done(
-	// $(".component").each(function(index){
-	// 	$(this).replaceWith($originals[index]);
-	// })
-	alert("done");
-	);
-
+    $(".component").each(function(){
+		runMyTransitions($(this));
+	});
 };
 
 
